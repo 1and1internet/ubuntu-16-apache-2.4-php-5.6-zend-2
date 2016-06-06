@@ -63,7 +63,7 @@ objects:
             timeoutSeconds: 1
           name: ${APP_SERVICE_NAME}
           volumeMounts:
-          - mountPath: /var/www
+          - mountPath: /var/www/html
             name: apache-data
         restartPolicy: Always
         securityContext:
