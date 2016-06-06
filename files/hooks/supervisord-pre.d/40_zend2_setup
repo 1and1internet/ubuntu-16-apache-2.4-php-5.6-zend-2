@@ -2,7 +2,7 @@
 
 #Checking to see if the Zend Framework 2 already exists. If it does then won't install it again.
 
-if [ -e "/var/www/html/index.html" ]; then 
+if [ ! -e "/var/www/html/index.php" ]; then 
 	echo "Zend Framework 2 doesn't appear to be installed, installing now ..."
 	cd /var/www/html
 	rm index.html
@@ -11,7 +11,6 @@ if [ -e "/var/www/html/index.html" ]; then
 	mv /var/www/public/* /var/www/html
 	mv /var/www/public/.htaccess /var/www/html
 	rmdir /var/www/public
-	
 else
 	echo "Zend Framework 2 appears to already be installed, no action taken."
 	exit 0
