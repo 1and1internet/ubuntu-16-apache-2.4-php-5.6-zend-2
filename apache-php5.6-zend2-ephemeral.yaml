@@ -57,7 +57,7 @@ objects:
           image: 1and1internet/ubuntu-16-apache-2.4-php-5.6-zend-2:latest
           imagePullPolicy: Always
           livenessProbe:
-            initialDelaySeconds: 30
+            initialDelaySeconds: 180
             tcpSocket:
                 port: 8080
             timeoutSeconds: 1
