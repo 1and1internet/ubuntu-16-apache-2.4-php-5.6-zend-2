@@ -1,24 +1,24 @@
-require 'rspec'
 require 'serverspec'
 require 'docker'
-require_relative '../../drone-tests/shared/jemonkeypatch.rb'
 
-LISTEN_PORT = 8080
-
+#Include Tests
 base_spec_dir = Pathname.new(File.join(File.dirname(__FILE__)))
 Dir[base_spec_dir.join('../../drone-tests/shared/**/*.rb')].sort.each { |f| require_relative f }
 
-set :backend, :docker
-@image = Docker::Image.get(ENV['IMAGE'])
-set :docker_image, @image.id
-#set :docker_debug, true
-set :docker_container_start_timeout, 180
-set :docker_container_ready_regex, /Zend Framework 2 should been installed/
+if not ENV['IMAGE'] then
+  puts "You must provide an IMAGE env variable"
+end
 
- set :docker_container_create_options, {
-    'Image'      => @image.id,
+LISTEN_PORT=8080
+CONTAINER_START_DELAY=3000
+
+RSpec.configure do |c|
+  @image = Docker::Image.get(ENV['IMAGE'])
+  set :backend, :docker
+  set :docker_image, @image.id
+  set :docker_container_create_options, {
     'User'     => '100000',
-    # 'hostname' => 'snowflake',
+    'hostname' => 'snowflake',
     'HostConfig'   => {
       'PortBindings' => {
         "#{LISTEN_PORT}/tcp" => [ { 'HostPort' => "#{LISTEN_PORT}" } ]
@@ -26,13 +26,14 @@ set :docker_container_ready_regex, /Zend Framework 2 should been installed/
     }
   }
 
-RSpec.configure do |c|
+  describe command("sleep #{CONTAINER_START_DELAY}") do
+    its(:stdout) { should eq "" }
+  end
 
-  describe 'tests' do
+  describe "tests" do
     include_examples 'docker-ubuntu-16'
     include_examples 'docker-ubuntu-16-apache-2.4'
     include_examples 'php-5.6-tests'
     include_examples 'zend-2-tests'
   end
-
 end
