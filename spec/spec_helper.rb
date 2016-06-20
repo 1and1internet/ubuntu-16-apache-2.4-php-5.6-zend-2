@@ -3,7 +3,7 @@ require 'serverspec'
 require 'docker'
 require_relative '../../drone-tests/shared/jemonkeypatch.rb'
 
-LISTEN_PORT = 8181
+LISTEN_PORT = 8080
 
 base_spec_dir = Pathname.new(File.join(File.dirname(__FILE__)))
 Dir[base_spec_dir.join('../../drone-tests/shared/**/*.rb')].sort.each { |f| require_relative f }
@@ -12,7 +12,7 @@ set :backend, :docker
 @image = Docker::Image.get(ENV['IMAGE'])
 set :docker_image, @image.id
 #set :docker_debug, true
-set :docker_container_start_timeout, 80
+set :docker_container_start_timeout, 180
 set :docker_container_ready_regex, /Zend Framework 2 should been installed/
 
 set :docker_container_create_options, {
