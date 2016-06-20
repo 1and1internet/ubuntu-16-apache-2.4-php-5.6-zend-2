@@ -3,7 +3,7 @@ require 'serverspec'
 require 'docker'
 require_relative '../../drone-tests/shared/jemonkeypatch.rb'
 
-LISTEN_PORT = 8080
+LISTEN_PORT = 8181
 
 base_spec_dir = Pathname.new(File.join(File.dirname(__FILE__)))
 Dir[base_spec_dir.join('../../drone-tests/shared/**/*.rb')].sort.each { |f| require_relative f }
